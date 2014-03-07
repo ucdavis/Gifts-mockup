@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Form Demo";
+}
+
+@section subhead
+{
+    <h1>Form Example</h1>
+
+    <div>
+        <p>This is an example of what a standard form would look like</p>
+    </div>
+}
+
+@section subnav
+{
+    <li>@Html.ActionLink("Sample Index", "Index")</li>
+    <li class="active">@Html.ActionLink("Form", "Form")</li>
+    <li>@Html.ActionLink("Table", "Table")</li>
+    <li>@Html.ActionLink("Data Tables", "DataTable")</li>
+    <li>@Html.ActionLink("Display Form", "DisplayForm")</li>
+}
+
+<form role="form" action="@Url.Action("Form")" method="POST" class="well well-large">
+    <fieldset>
+        <legend>Personal Information</legend>
+        <div class="form-group">
+            <label for="inputFirstName" class="required">First Name</label>
+            <input type="text" class="form-control" id="inputFirstName" name="inputFirstName" placeholder="First Name" data-val="true" data-val-required="First Name Required">
+            <span class="field-validation-valid" data-valmsg-for="inputFirstName" data-valmsg-replace="true"></span>
+        </div>        
+        <div class="form-group">
+            <label for="inputLastName" class="required">Last Name</label>
+            <input type="text" class="form-control" id="inputLastName" name="inputLastName" placeholder="Last Name" data-val="true" data-val-required="Last Name Required">
+            <span class="field-validation-valid" data-valmsg-for="inputLastName" data-valmsg-replace="true"></span>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail">Email address</label>
+            <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+            <label for="inputBirthday">Birthday</label>
+            <input type="date" class="form-control" id="inputBirthday" name="inputBirthday">
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Contact Information</legend>
+        <div class="form-group">
+            <label for="inputAddress">Address</label>
+            <input type="text" class="form-control" id="inputAddress" name="inputAddress" placeholder="Address"/>
+        </div>
+        <div class="form-group">
+            <label for="inputState">State</label>
+            <select id="inputState" class="form-control">
+                <option value>-- Select A State --</option>
+                <option value="CA">California</option>
+                <option value="NY">New York</option>
+            </select>
+        </div>
+    </fieldset>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class="btn btn-link">Cancel</button>
+</form>			
