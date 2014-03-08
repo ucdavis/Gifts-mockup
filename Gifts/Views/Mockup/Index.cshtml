@@ -11,12 +11,55 @@
     </div>
 }
 
-<div class="well">
-    <fieldset>
-        <legend>Primary Donor Information</legend>
-        <p>Enter the donor information here, or click "new donor" they do not exist</p>
-    </fieldset>
+<div ng-app="gift">
+    <script type="text/ng-template" id="donorTemplate.html">
+    <a>
+        <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+        <p class="small">{{match.model.address}}</p>
+    </a>
+</script>
+    <form ng-controller="DonationController">
+        <div class="well">
+            <fieldset>
+                <legend>Primary Donor Information</legend>
+                <p>Enter the donor information here, or click "new donor" if they do not exist</p>
+                <div class="form-group">
+                    <span>Donor:</span>
+                    <input type="text" class="form-control" placeholder="donor name" ng-model="donorSelected"
+                           typeahead="donor as donor.display for donor in availableDonors | filter:{display:$viewValue}" typeahead-template-url="donorTemplate.html" />
+                    <p class="help-block">You can enter any donor's name or their advance donor ID</p>
+                </div>
+                <div class="col-lg-8 col-lg-offset-4 well well-sm" ng-show="donorSelected.id">
+                    <h4><i class="fa fa-gift"></i> {{donorSelected.display}}</h4>
+                    <p>{{donorSelected.address}}</p>
+                    <p>{{donorSelected.phone}}</p>
+                </div>
+            </fieldset>
+        </div>
+        <div class="well">
+            <fieldset>
+                <legend>Additional Donors</legend>
+                <p>Enter information about additional donors here</p>
+            </fieldset>
+        </div>
+    </form>
 </div>
-<div class="well">
-    <h3>second</h3>
-</div>
+
+@section AdditionalScripts
+{
+    <script src="~/Scripts/angular.js"></script>
+    @*<script src="~/Scripts/ui-bootstrap-0.10.0.js"></script>*@
+    <script src="~/Scripts/ui-bootstrap-tpls-0.10.0.js"></script>
+    
+    <script type="text/javascript">
+        angular.module('gift', ['ui.bootstrap'])
+            .controller('DonationController', function($scope) {
+                $scope.donorSelected = undefined;
+                $scope.availableDonors = [
+                    { id: 'ABCDEFG', name: 'alice cooper', display: 'alice cooper (ABCDEFG)', address: '123 street, davis, ca', phone: '555-5555' },
+                    { id: 'HIJKLMN', name: 'bob dobalina', display: 'bob dobalina (HIJKLMN)', address: '456 street, davis, ca', phone: '555-5555' }
+                ];
+            });
+
+    </script>
+}
