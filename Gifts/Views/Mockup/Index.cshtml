@@ -40,7 +40,67 @@
             <fieldset>
                 <legend>Additional Donors</legend>
                 <p>Enter information about additional donors here</p>
+                <div class="form-group" ng-repeat="additionalDonor in additionalDonors">
+                    <span>Donor #{{$index+2}}</span>
+                    <input type="text" class="form-control" placeholder="donor name" ng-model="additionalDonorSelected"
+                           typeahead="donor as donor.display for donor in availableDonors | filter:{display:$viewValue}" typeahead-template-url="donorTemplate.html" />
+                    <p class="help-block">You can enter any donor's name or their advance donor ID</p>
+                    <div class="col-lg-8 col-lg-offset-4 well well-sm" ng-show="additionalDonorSelected.id">
+                        <h4><i class="fa fa-gift"></i> {{additionalDonorSelected.display}}</h4>
+                        <p>{{additionalDonorSelected.address}}</p>
+                        <p>{{additionalDonorSelected.phone}}</p>
+                    </div>
+                </div>
+                <button class="btn btn-default" ng-click="additionalDonors.push({});"><i class="fa fa-plus"></i> Add Another Donor</button>
             </fieldset>
+        </div>
+        <div class="well">
+            <fieldset>
+                <legend>General Info</legend>
+                <div class="form-group">
+                    <span>When did you receieve this gift?</span>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="input-group">
+                                <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span>What type of gift is this?</span>
+                    <select class="form-control">
+                        <option selected>Regents</option>
+                        <option>Foundation</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <span>What tendor type did the donor supply?</span>
+                    <select class="form-control" ng-model="tendor">
+                        <option>Cash</option>
+                        <option>Check</option>
+                        <option>Ponies!</option>
+                    </select>
+                </div>
+            </fieldset>
+        </div>
+        <div class="well" ng-show="tendor === 'Cash'">
+            <fieldset>
+                <legend>Specific Cash Related Questions</legend>
+                <div class="form-group">
+                    <span>How much?</span>
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        <input type="number" class="form-control" placeholder="$USD value of the cash donation" />
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="well" ng-show="tendor === 'Check'">
+            check
         </div>
     </form>
 </div>
@@ -55,10 +115,48 @@
         angular.module('gift', ['ui.bootstrap'])
             .controller('DonationController', function($scope) {
                 $scope.donorSelected = undefined;
+                $scope.dt = new Date();
+                $scope.tendor = 'Ponies!';
+
+                $scope.additionalDonors = [{}];
                 $scope.availableDonors = [
                     { id: 'ABCDEFG', name: 'alice cooper', display: 'alice cooper (ABCDEFG)', address: '123 street, davis, ca', phone: '555-5555' },
                     { id: 'HIJKLMN', name: 'bob dobalina', display: 'bob dobalina (HIJKLMN)', address: '456 street, davis, ca', phone: '555-5555' }
                 ];
+
+                $scope.showWeeks = true;
+                $scope.toggleWeeks = function () {
+                    $scope.showWeeks = !$scope.showWeeks;
+                };
+
+                $scope.clear = function () {
+                    $scope.dt = null;
+                };
+
+                // Disable weekend selection
+                $scope.disabled = function (date, mode) {
+                    return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
+                };
+
+                $scope.toggleMin = function () {
+                    $scope.minDate = ($scope.minDate) ? null : new Date();
+                };
+                $scope.toggleMin();
+
+                $scope.open = function ($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+
+                    $scope.opened = true;
+                };
+
+                $scope.dateOptions = {
+                    'year-format': "'yy'",
+                    'starting-day': 1
+                };
+
+                $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'longDate'];
+                $scope.format = $scope.formats[2];
             });
 
     </script>
