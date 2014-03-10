@@ -58,7 +58,7 @@
             <fieldset>
                 <legend>General Info</legend>
                 <div class="form-group">
-                    <span>When did you receieve this gift?</span>
+                    <span>When did you receieve this donation?</span>
                     <div class="row">
                         <div class="col-md-6">
                             <p class="input-group">
@@ -71,10 +71,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <span>What type of gift is this?</span>
+                    <span>What type of transaction is this?</span>
                     <select class="form-control">
-                        <option selected>Regents</option>
-                        <option>Foundation</option>
+                        <option selected>Gift</option>
+                        <option>Pledge</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -100,7 +100,60 @@
             </fieldset>
         </div>
         <div class="well" ng-show="tendor === 'Check'">
-            check
+            <fieldset>
+                <legend>Specific Check Related Questions</legend>
+                <div class="form-group">
+                    <span>How much?</span>
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        <input type="number" class="form-control" placeholder="$USD value of the cash donation" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span>What's the check number?</span>
+                    <div class="input-group">
+                        <span class="input-group-addon">#</span>
+                        <input type="number" class="form-control" placeholder="check number" />
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="well">
+            <fieldset>
+                <legend>Accounting Information</legend>
+                <div class="form-group">
+                    <span>How should this donation be used?</span>
+                    <select class="form-control">
+                        <option selected>Current Use</option>
+                        <option>Endowed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <span>Enter the associated Kauali account number, or click 'new fund' you need to create a new fund (will delay processing)</span>
+                    <input type="text" class="form-control" placeholder="kuali account number" ng-model="accountSelected"
+                           typeahead="account as account.display for account in kfsAccounts | filter:{display:$viewValue}" />
+                    <p class="help-block">You can enter a kuali account number or search on the account name</p>
+                </div>
+                <div ng-show="accountSelected.id">
+                    <dl class="dl-horizontal">
+                        <dt>Agency</dt>
+                        <dd>{{accountSelected.agency}}</dd>
+                        <dt>Kuali Account Number</dt>
+                        <dd>{{accountSelected.id}}</dd>
+                        <dt>UC Account Number</dt>
+                        <dd>{{accountSelected.ucaccount}}</dd>
+                        <dt>Fund Name</dt>
+                        <dd>{{accountSelected.fund}}</dd>
+                        <dt>Program</dt>
+                        <dd>{{accountSelected.program}}</dd>
+                        <dt>Account Purpose</dt>
+                        <dd>{{accountSelected.purpose}}</dd>
+                    </dl>
+                </div>
+                <div ng-hide="accountSelected.id">
+                    <button class="btn"><i class="fa fa-plus"></i> Create a new fund</button>
+                </div>
+            </fieldset>
         </div>
     </form>
 </div>
@@ -122,6 +175,29 @@
                 $scope.availableDonors = [
                     { id: 'ABCDEFG', name: 'alice cooper', display: 'alice cooper (ABCDEFG)', address: '123 street, davis, ca', phone: '555-5555' },
                     { id: 'HIJKLMN', name: 'bob dobalina', display: 'bob dobalina (HIJKLMN)', address: '456 street, davis, ca', phone: '555-5555' }
+                ];
+
+                $scope.kfsAccounts = [
+                    {
+                        id: '3-GIMMEIT',
+                        name: 'some fund',
+                        display: 'some fund (3-GIMMEIT)',
+                        ucaccount: '12345',
+                        agency: 'regents',
+                        fund: 'the good ole fund',
+                        purpose: 'to airdrop donations into needy areas',
+                        program: 'the mondavi center'
+                    },
+                    {
+                        id: 'L-DONATES',
+                        name: 'a different type of fund',
+                        display: 'a different type of fund (L-DONATES)',
+                        ucaccount: '67890',
+                        agency: 'foundation',
+                        fund: 'the magic schoolbus fund',
+                        purpose: 'to be the best account it can be',
+                        program: 'feed the hungry programmers'
+                    }
                 ];
 
                 $scope.showWeeks = true;
