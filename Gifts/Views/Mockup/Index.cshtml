@@ -155,6 +155,44 @@
                 </div>
             </fieldset>
         </div>
+        <div class="well">
+            <fieldset>
+                <legend>Regulatory Requirements</legend>
+                <p class="alert alert-warning">
+                    Please answer the following questions truthfully and upload any supporting documentation as required
+                </p>
+                <div class="form-group">
+                    <span>Is this gift from an employee to an account controlled by the same employee?</span>
+                    <select class="form-control" ng-model="employeeAccount">
+                        <option>No</option>
+                        <option>Yes</option>
+                    </select>
+                    <div ng-show="employeeAccount === 'Yes'">
+                        <br/>
+                        <div class="row">
+                            <div class="col-lg-6 col-lg-offset-1">
+                                <button class="btn btn-danger"><i class="fa fa-file"></i> Upload Supporting Documentation [required]</button>
+                            </div>    
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span>Is the gift for Research from a non-individual entity?</span>
+                    <select class="form-control" ng-model="researchEntity">
+                        <option>No</option>
+                        <option>Yes</option>
+                    </select>
+                    <div ng-show="researchEntity === 'Yes'">
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-6 col-lg-offset-1">
+                                <button class="btn btn-danger"><i class="fa fa-file"></i> Upload Supporting Documentation [required]</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
     </form>
 </div>
 
@@ -169,7 +207,7 @@
             .controller('DonationController', function($scope) {
                 $scope.donorSelected = undefined;
                 $scope.dt = new Date();
-                $scope.tendor = 'Ponies!';
+                $scope.tendor = 'Cash';
 
                 $scope.additionalDonors = [{}];
                 $scope.availableDonors = [
