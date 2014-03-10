@@ -18,6 +18,24 @@
         <p class="small">{{match.model.address}}</p>
     </a>
 </script>
+<script type="text/ng-template" id="newAccountTemplate.html">
+    <div class="modal-header">
+        <h3>I'm a modal!</h3>
+    </div>
+    <div class="modal-body">
+        <ul>
+            <li ng-repeat="item in items">
+                <a ng-click="selected.item = item">{{ item }}</a>
+            </li>
+        </ul>
+        Selected: <b>{{ selected.item }}</b>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
     <form ng-controller="DonationController">
         <div class="well">
             <fieldset>
@@ -151,7 +169,7 @@
                     </dl>
                 </div>
                 <div ng-hide="accountSelected.id">
-                    <button class="btn"><i class="fa fa-plus"></i> Create a new fund</button>
+                    <button class="btn" ng-click="openNewFund()"><i class="fa fa-plus"></i> Create a new fund</button>
                 </div>
             </fieldset>
         </div>
@@ -233,7 +251,7 @@
     
     <script type="text/javascript">
         angular.module('gift', ['ui.bootstrap'])
-            .controller('DonationController', function($scope) {
+            .controller('DonationController', function($scope, $modal, $log) {
                 $scope.donorSelected = undefined;
                 $scope.dt = new Date();
                 $scope.tendor = 'Cash';
@@ -267,26 +285,48 @@
                     }
                 ];
 
+                /* -- new fund modal */
+                $scope.openNewFund = function() {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'newAccountTemplate.html',
+                        controller: 'KfsAccountModalController',
+                        resolve: {
+                            kfsAccounts: function() {
+                                return $scope.kfsAccounts;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function (newAccount) {
+                        if (newAccount && newAccount.id) {
+                            $scope.kfsAccounts.push(newAccount);
+                        }
+                    }, function() {
+                        $log.info('Modal dismissed at: ' + new Date());
+                    });
+                };
+
+                /* -- datepicker */
                 $scope.showWeeks = true;
-                $scope.toggleWeeks = function () {
+                $scope.toggleWeeks = function() {
                     $scope.showWeeks = !$scope.showWeeks;
                 };
 
-                $scope.clear = function () {
+                $scope.clear = function() {
                     $scope.dt = null;
                 };
 
                 // Disable weekend selection
-                $scope.disabled = function (date, mode) {
+                $scope.disabled = function(date, mode) {
                     return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
                 };
 
-                $scope.toggleMin = function () {
+                $scope.toggleMin = function() {
                     $scope.minDate = ($scope.minDate) ? null : new Date();
                 };
                 $scope.toggleMin();
 
-                $scope.open = function ($event) {
+                $scope.open = function($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
 
@@ -300,6 +340,17 @@
 
                 $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'longDate'];
                 $scope.format = $scope.formats[2];
+            })
+            .controller('KfsAccountModalController', function($scope, $modalInstance) {
+                $scope.newAccount = {};
+
+                $scope.ok = function () {
+                    $modalInstance.close($scope.newAccount);
+                };
+
+                $scope.cancel = function () {
+                    $modalInstance.dismiss('cancel');
+                };
             });
 
     </script>
