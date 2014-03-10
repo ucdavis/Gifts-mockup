@@ -256,6 +256,7 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\debut_light.png" />
     <Content Include="Content\images\logo.png" />
+    <Content Include="Content\Rainbow-Dash.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="faviconUcdArch.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
