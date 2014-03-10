@@ -18,17 +18,49 @@
         <p class="small">{{match.model.address}}</p>
     </a>
 </script>
-<script type="text/ng-template" id="newAccountTemplate.html">
+    <script type="text/ng-template" id="newAccountTemplate.html">
     <div class="modal-header">
-        <h3>I'm a modal!</h3>
+        <h3>Create a new fund</h3>
     </div>
     <div class="modal-body">
-        <ul>
-            <li ng-repeat="item in items">
-                <a ng-click="selected.item = item">{{ item }}</a>
-            </li>
-        </ul>
-        Selected: <b>{{ selected.item }}</b>
+        <form>
+            <fieldset>
+                <legend>
+                    The following fields are all required to create a new fund
+                </legend>
+                <div class="form-group">
+                    <span>Agency</span>
+                    <select class="form-control" ng-model="newAccount.agency">
+                        <option>Regents</option>
+                        <option>Foundation</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <span>KFS (Kuali) Account Number</span>
+                    <input type="text" class="form-control" placeholder="KFS Account Number" ng-model="newAccount.id" />
+                </div>
+                <div class="form-group">
+                    <span>KFS (Kuali) Account Name</span>
+                    <input type="text" class="form-control" placeholder="KFS Account Name" ng-model="newAccount.name" />
+                </div>
+                <div class="form-group">
+                    <span>UC Account Number</span>
+                    <input type="text" class="form-control" placeholder="UC Account Number" ng-model="newAccount.ucaccount" />
+                </div>
+                <div class="form-group">
+                    <span>Fund Name</span>
+                    <input type="text" class="form-control" placeholder="Fund Name" ng-model="newAccount.fund" />
+                </div>
+                <div class="form-group">
+                    <span>Program Name</span>
+                    <input type="text" class="form-control" placeholder="Program Name" ng-model="newAccount.program" />
+                </div>
+                <div class="form-group">
+                    <span>Purpose</span>
+                    <input type="text" class="form-control" placeholder="Purpose" ng-model="newAccount.purpose" />
+                </div>
+            </fieldset>
+        </form>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" ng-click="ok()">OK</button>
@@ -262,6 +294,7 @@
                     { id: 'HIJKLMN', name: 'bob dobalina', display: 'bob dobalina (HIJKLMN)', address: '456 street, davis, ca', phone: '555-5555' }
                 ];
 
+                $scope.accountSelected = '';
                 $scope.kfsAccounts = [
                     {
                         id: '3-GIMMEIT',
@@ -299,6 +332,8 @@
 
                     modalInstance.result.then(function (newAccount) {
                         if (newAccount && newAccount.id) {
+                            newAccount.display = newAccount.name + ' (' + newAccount.id + ')';
+                            $scope.accountSelected = newAccount;
                             $scope.kfsAccounts.push(newAccount);
                         }
                     }, function() {
@@ -342,7 +377,7 @@
                 $scope.format = $scope.formats[2];
             })
             .controller('KfsAccountModalController', function($scope, $modalInstance) {
-                $scope.newAccount = {};
+                $scope.newAccount = { agency: 'Regents'};
 
                 $scope.ok = function () {
                     $modalInstance.close($scope.newAccount);
