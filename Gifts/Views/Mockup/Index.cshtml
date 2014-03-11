@@ -18,6 +18,37 @@
         <p class="small">{{match.model.address}}</p>
     </a>
 </script>
+
+    <script type="text/ng-template" id="newDonorTemplate.html">
+        <div class="modal-header">
+            <h3>Create a new donor</h3>
+        </div>
+        <div class="modal-body">
+            <form>
+                <fieldset>
+                    <legend>
+                        The following fields are all required to create a new donor
+                    </legend>                    
+                    <div class="form-group">
+                        <span>Donor Name</span>
+                        <input type="text" class="form-control" placeholder="donor name" ng-model="newDonor.name" />
+                    </div>
+                    <div class="form-group">
+                        <span>Address</span>
+                        <input type="text" class="form-control" placeholder="1 Shields Ave, Davis, CA, 95616" ng-model="newDonor.address" />
+                    </div>
+                    <div class="form-group">
+                        <span>Phone</span>
+                        <input type="text" class="form-control" placeholder="phone number, ex: (530) 555-5555" ng-model="newDonor.phone" />
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">Create!</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
     <script type="text/ng-template" id="newAccountTemplate.html">
     <div class="modal-header">
         <h3>Create a new fund</h3>
@@ -72,7 +103,10 @@
         <div class="well">
             <fieldset>
                 <legend>Primary Donor Information</legend>
-                <p>Enter the donor information here, or click "new donor" if they do not exist</p>
+                <div class="pull-right" ng-hide="donorSelected.id">
+                    <button class="btn" ng-click="openNewDonor()"><i class="fa fa-plus"></i> Create new donor</button>
+                </div>
+                <p>Enter the donor information here, or click "create new donor" if you are sure they do not exist in advance</p>
                 <div class="form-group">
                     <span>Donor:</span>
                     <input type="text" class="form-control" placeholder="donor name" ng-model="donorSelected"
@@ -339,6 +373,24 @@
                     }
                 ];
 
+                /* -- new donor modal */
+                $scope.openNewDonor = function() {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'newDonorTemplate.html',
+                        controller: 'DonorModalController'
+                    });
+
+                    modalInstance.result.then(function (newDonor) {
+                        if (newDonor && newDonor.id) {
+                            newDonor.display = newDonor.name + ' (' + newDonor.id + ')';
+                            $scope.donorSelected = newDonor;
+                            $scope.availableDonors.push(newDonor);
+                        }
+                    }, function () {
+                        $log.info('Modal dismissed at: ' + new Date());
+                    });
+                };
+
                 /* -- new fund modal */
                 $scope.openNewFund = function() {
                     var modalInstance = $modal.open({
@@ -407,7 +459,30 @@
                 $scope.cancel = function () {
                     $modalInstance.dismiss('cancel');
                 };
-            });
+            })
+            .controller('DonorModalController', function($scope, $modalInstance) {
+                $scope.newDonor = {};
+
+                function makeid() {
+                    var text = "";
+                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+                    for (var i = 0; i < 5; i++)
+                        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+                    return text;
+                };
+
+                $scope.ok = function () {
+                    //call service and create an id for this donor
+                    $scope.newDonor.id = makeid();
+                    $modalInstance.close($scope.newDonor);
+                };
+
+                $scope.cancel = function () {
+                    $modalInstance.dismiss('cancel');
+                };
+        });
 
     </script>
 }
