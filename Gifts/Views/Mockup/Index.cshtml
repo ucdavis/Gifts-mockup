@@ -2,6 +2,16 @@
     ViewBag.Title = "Mockup Form";
 }
 
+<style type="text/css">
+    .drop-box {
+        background: #F8F8F8;
+        border: 5px dashed #DDD;
+        height: 65px;
+        text-align: center;
+        padding-top: 35px;
+    }
+</style>
+
 @section subhead
 {
     <h1>Gift Form Example</h1>
@@ -319,6 +329,17 @@
                 <div class="form-group">
                     <span>Upload file TESTING</span>
                     <input type="file" class="form-control" ng-file-select="onFileSelect($files)">
+                    <div class="drop-box">
+                        <div ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class"
+                             ng-show="dropSupported">
+                            Upload the file or drop it here
+                        </div>
+                        <div ng-file-drop-available="dropSupported=true"
+                             ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
+                    </div>
+                    <progressbar max="100" value="donorInstructionsProgress" ng-show="donorInstructionsProgress">
+                        <span style="color:black; white-space:nowrap;">{{donorInstructionsProgress}}%</span>
+                    </progressbar>
                 </div>
             </fieldset>
         </div>

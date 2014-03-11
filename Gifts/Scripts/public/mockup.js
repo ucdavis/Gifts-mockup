@@ -128,6 +128,7 @@
                     /* customize how data is added to formData. See #40#issuecomment-28612000 for example */
                     //formDataAppender: function(formData, key, val){} //#40#issuecomment-28612000
                 }).progress(function (evt) {
+                    $scope.donorInstructionsProgress = parseInt(100.0 * evt.loaded / evt.total);
                     console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
                 }).success(function (data, status, headers, config) {
                     // file is uploaded successfully
