@@ -319,27 +319,23 @@
                     <span>Donor Instructions: enter the donor instructions or upload them as a PDF file</span>
                     <div class="row">
                         <div class="col-lg-6">
-                            <textarea class="form-control" placeholder="enter donor instructions"></textarea>                            
+                            <textarea class="form-control" rows="4" placeholder="enter donor instructions"></textarea>                            
                         </div>
                         <div class="col-lg-6">
-                            <button class="btn btn-default form-control"><i class="fa fa-file-text"></i> Upload Donor Instructions</button>                
+                            <input type="file" class="form-control" ng-file-select="onFileSelect($files)">
+                            <div class="drop-box">
+                                <div ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class"
+                                     ng-show="dropSupported">
+                                    Upload the file above or drop it here
+                                </div>
+                                <div ng-file-drop-available="dropSupported=true"
+                                     ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
+                            </div>              
+                            <progressbar max="100" value="donorInstructionsProgress" ng-show="donorInstructionsProgress">
+                                <span style="color:black; white-space:nowrap;">{{donorInstructionsProgress}}%</span>
+                            </progressbar>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <span>Upload file TESTING</span>
-                    <input type="file" class="form-control" ng-file-select="onFileSelect($files)">
-                    <div class="drop-box">
-                        <div ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class"
-                             ng-show="dropSupported">
-                            Upload the file or drop it here
-                        </div>
-                        <div ng-file-drop-available="dropSupported=true"
-                             ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
-                    </div>
-                    <progressbar max="100" value="donorInstructionsProgress" ng-show="donorInstructionsProgress">
-                        <span style="color:black; white-space:nowrap;">{{donorInstructionsProgress}}%</span>
-                    </progressbar>
                 </div>
             </fieldset>
         </div>
