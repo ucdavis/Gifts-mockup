@@ -2,6 +2,16 @@
     ViewBag.Title = "Mockup Form";
 }
 
+<style type="text/css">
+    .drop-box {
+        background: #F8F8F8;
+        border: 5px dashed #DDD;
+        height: 65px;
+        text-align: center;
+        padding-top: 35px;
+    }
+</style>
+
 @section subhead
 {
     <h1>Gift Form Example</h1>
@@ -68,11 +78,11 @@
                 </div>
                 <div class="form-group">
                     <span>KFS (Kuali) Account Number</span>
-                    <input type="text" class="form-control" placeholder="KFS Account Number" ng-model="newAccount.id" />
+                    <input type="text" class="form-control" placeholder="KFS Account Number" readonly ng-model="newAccount.id" />
                 </div>
                 <div class="form-group">
                     <span>KFS (Kuali) Account Name</span>
-                    <input type="text" class="form-control" placeholder="KFS Account Name" ng-model="newAccount.name" />
+                    <input type="text" class="form-control" placeholder="KFS Account Name" readonly ng-model="newAccount.name" />
                 </div>
                 <div class="form-group">
                     <span>UC Account Number</span>
@@ -227,13 +237,6 @@
             <fieldset>
                 <legend>Accounting Information</legend>
                 <div class="form-group">
-                    <span>How should this donation be used?</span>
-                    <select class="form-control">
-                        <option selected>Current Use</option>
-                        <option>Endowed</option>
-                    </select>
-                </div>
-                <div class="form-group">
                     <span>Enter the associated Kauali account number, or click 'new fund' you need to create a new fund (will delay processing)</span>
                     <input type="text" class="form-control" placeholder="kuali account number" ng-model="accountSelected"
                            typeahead="account as account.display for account in kfsAccounts | filter:{display:$viewValue}" />
@@ -309,10 +312,21 @@
                     <span>Donor Instructions: enter the donor instructions or upload them as a PDF file</span>
                     <div class="row">
                         <div class="col-lg-6">
-                            <textarea class="form-control" placeholder="enter donor instructions"></textarea>                            
+                            <textarea class="form-control" rows="4" placeholder="enter donor instructions"></textarea>                            
                         </div>
                         <div class="col-lg-6">
-                            <button class="btn btn-default form-control"><i class="fa fa-file-text"></i> Upload Donor Instructions</button>                
+                            <input type="file" class="form-control" ng-file-select="onFileSelect($files)">
+                            <div class="drop-box">
+                                <div ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class"
+                                     ng-show="dropSupported">
+                                    Upload the file above or drop it here
+                                </div>
+                                <div ng-file-drop-available="dropSupported=true"
+                                     ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
+                            </div>              
+                            <progressbar max="100" value="donorInstructionsProgress" ng-show="donorInstructionsProgress">
+                                <span style="color:black; white-space:nowrap;">{{donorInstructionsProgress}}%</span>
+                            </progressbar>
                         </div>
                     </div>
                 </div>
@@ -332,157 +346,9 @@
 
 @section AdditionalScripts
 {
+    <script src="~/Scripts/angular-file-upload-shim.js"></script>
     <script src="~/Scripts/angular.js"></script>
-    @*<script src="~/Scripts/ui-bootstrap-0.10.0.js"></script>*@
     <script src="~/Scripts/ui-bootstrap-tpls-0.10.0.js"></script>
-    
-    <script type="text/javascript">
-        angular.module('gift', ['ui.bootstrap'])
-            .controller('DonationController', function($scope, $modal, $log) {
-                $scope.donorSelected = undefined;
-                $scope.dt = new Date();
-                $scope.tendor = 'Cash';
-
-                $scope.additionalDonors = [{}];
-                $scope.availableDonors = [
-                    { id: 'ABCDEFG', name: 'alice cooper', display: 'alice cooper (ABCDEFG)', address: '123 street, davis, ca', phone: '555-5555' },
-                    { id: 'HIJKLMN', name: 'bob dobalina', display: 'bob dobalina (HIJKLMN)', address: '456 street, davis, ca', phone: '555-5555' }
-                ];
-
-                $scope.accountSelected = '';
-                $scope.kfsAccounts = [
-                    {
-                        id: '3-GIMMEIT',
-                        name: 'some fund',
-                        display: 'some fund (3-GIMMEIT)',
-                        ucaccount: '12345',
-                        agency: 'regents',
-                        fund: 'the good ole fund',
-                        purpose: 'to airdrop donations into needy areas',
-                        program: 'the mondavi center'
-                    },
-                    {
-                        id: 'L-DONATES',
-                        name: 'a different type of fund',
-                        display: 'a different type of fund (L-DONATES)',
-                        ucaccount: '67890',
-                        agency: 'foundation',
-                        fund: 'the magic schoolbus fund',
-                        purpose: 'to be the best account it can be',
-                        program: 'feed the hungry programmers'
-                    }
-                ];
-
-                /* -- new donor modal */
-                $scope.openNewDonor = function() {
-                    var modalInstance = $modal.open({
-                        templateUrl: 'newDonorTemplate.html',
-                        controller: 'DonorModalController'
-                    });
-
-                    modalInstance.result.then(function (newDonor) {
-                        if (newDonor && newDonor.id) {
-                            newDonor.display = newDonor.name + ' (' + newDonor.id + ')';
-                            $scope.donorSelected = newDonor;
-                            $scope.availableDonors.push(newDonor);
-                        }
-                    }, function () {
-                        $log.info('Modal dismissed at: ' + new Date());
-                    });
-                };
-
-                /* -- new fund modal */
-                $scope.openNewFund = function() {
-                    var modalInstance = $modal.open({
-                        templateUrl: 'newAccountTemplate.html',
-                        controller: 'KfsAccountModalController',
-                        resolve: {
-                            kfsAccounts: function() {
-                                return $scope.kfsAccounts;
-                            }
-                        }
-                    });
-
-                    modalInstance.result.then(function (newAccount) {
-                        if (newAccount && newAccount.id) {
-                            newAccount.display = newAccount.name + ' (' + newAccount.id + ')';
-                            $scope.accountSelected = newAccount;
-                            $scope.kfsAccounts.push(newAccount);
-                        }
-                    }, function() {
-                        $log.info('Modal dismissed at: ' + new Date());
-                    });
-                };
-
-                /* -- datepicker */
-                $scope.showWeeks = true;
-                $scope.toggleWeeks = function() {
-                    $scope.showWeeks = !$scope.showWeeks;
-                };
-
-                $scope.clear = function() {
-                    $scope.dt = null;
-                };
-
-                // Disable weekend selection
-                $scope.disabled = function(date, mode) {
-                    return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
-                };
-
-                $scope.toggleMin = function() {
-                    $scope.minDate = ($scope.minDate) ? null : new Date();
-                };
-                $scope.toggleMin();
-
-                $scope.open = function($event) {
-                    $event.preventDefault();
-                    $event.stopPropagation();
-
-                    $scope.opened = true;
-                };
-
-                $scope.dateOptions = {
-                    'year-format': "'yy'",
-                    'starting-day': 1
-                };
-
-                $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'longDate'];
-                $scope.format = $scope.formats[2];
-            })
-            .controller('KfsAccountModalController', function($scope, $modalInstance) {
-                $scope.newAccount = { agency: 'Regents'};
-
-                $scope.ok = function () {
-                    $modalInstance.close($scope.newAccount);
-                };
-
-                $scope.cancel = function () {
-                    $modalInstance.dismiss('cancel');
-                };
-            })
-            .controller('DonorModalController', function($scope, $modalInstance) {
-                $scope.newDonor = {};
-
-                function makeid() {
-                    var text = "";
-                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-                    for (var i = 0; i < 5; i++)
-                        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-                    return text;
-                };
-
-                $scope.ok = function () {
-                    //call service and create an id for this donor
-                    $scope.newDonor.id = makeid();
-                    $modalInstance.close($scope.newDonor);
-                };
-
-                $scope.cancel = function () {
-                    $modalInstance.dismiss('cancel');
-                };
-        });
-
-    </script>
+    <script src="~/Scripts/angular-file-upload.js"></script>
+    <script src="@Url.Script("public/mockup.js")"></script>
 }
