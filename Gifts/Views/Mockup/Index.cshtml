@@ -78,11 +78,11 @@
                 </div>
                 <div class="form-group">
                     <span>KFS (Kuali) Account Number</span>
-                    <input type="text" class="form-control" placeholder="KFS Account Number" ng-model="newAccount.id" />
+                    <input type="text" class="form-control" placeholder="KFS Account Number" readonly ng-model="newAccount.id" />
                 </div>
                 <div class="form-group">
                     <span>KFS (Kuali) Account Name</span>
-                    <input type="text" class="form-control" placeholder="KFS Account Name" ng-model="newAccount.name" />
+                    <input type="text" class="form-control" placeholder="KFS Account Name" readonly ng-model="newAccount.name" />
                 </div>
                 <div class="form-group">
                     <span>UC Account Number</span>
@@ -236,13 +236,6 @@
         <div class="well">
             <fieldset>
                 <legend>Accounting Information</legend>
-                <div class="form-group">
-                    <span>How should this donation be used?</span>
-                    <select class="form-control">
-                        <option selected>Current Use</option>
-                        <option>Endowed</option>
-                    </select>
-                </div>
                 <div class="form-group">
                     <span>Enter the associated Kauali account number, or click 'new fund' you need to create a new fund (will delay processing)</span>
                     <input type="text" class="form-control" placeholder="kuali account number" ng-model="accountSelected"

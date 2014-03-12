@@ -141,7 +141,7 @@
         };
     })
     .controller('KfsAccountModalController', function($scope, $modalInstance) {
-        $scope.newAccount = { agency: 'Regents' };
+        $scope.newAccount = { agency: 'Regents', id: '3-HOLDING', name: 'Advance Holding Account' };
 
         $scope.ok = function() {
             $modalInstance.close($scope.newAccount);
