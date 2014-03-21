@@ -1,6 +1,8 @@
 ﻿angular.module('gift', ['ui.bootstrap', 'angularFileUpload'])
     .controller('DonationController', function($scope, $filter, $upload, $modal, $log) {
         $scope.donorSelected = undefined;
+        $scope.additionalDonorSelected = undefined;
+
         $scope.dt = new Date();
         $scope.tendor = 'Cash';
 
@@ -179,6 +181,27 @@
             }
             // $scope.upload = $upload.upload({...}) alternative way of uploading, sends the the file content directly with the same content-type of the file. Could be used to upload files to CouchDB, imgur, etc... for HTML5 FileReader browsers. 
         };
+    })
+    .controller('AdditionalDonorController', function ($scope, $filter) {
+        $scope.$watch('additionalDonor.id', function (val) {
+            if (val && val.length === 7) {
+                $scope.additionalDonor.statusClasses = "fa-spin fa-spinner";
+                //do some ajax search
+                var found = $filter('filter')($scope.availableDonors, { id: val }, false);
+                console.log(found);
+                if (found && found.length) {
+                    $scope.additionalDonor = angular.copy(found[0]);
+                    $scope.additionalDonor.statusClasses = "fa-check";
+                    $scope.additionalDonor.valid = true;
+                } else {
+                    $scope.additionalDonor.statusClasses = "fa-exclamation"; //not found
+                    $scope.additionalDonor.valid = false;
+                }
+            } else {
+                $scope.additionalDonor.statusClasses = "fa-warning";
+                $scope.additionalDonor.valid = false;
+            }
+        });
     })
     .controller('KfsAccountModalController', function($scope, $modalInstance) {
         $scope.newAccount = { agency: 'Regents', id: '3-HOLDING', name: 'Advance Holding Account' };
