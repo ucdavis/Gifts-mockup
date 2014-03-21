@@ -52,7 +52,7 @@
                 <p>Enter information about additional donors here</p>
                 <div ng-repeat="additionalDonor in additionalDonors" ng-controller="AdditionalDonorController">
                     <div class="form-group has-feedback">
-                        <span>Donor #{{$index+2}} AdvanceID</span>
+                        <span>Donor #{{$parent.$index+2}} AdvanceID</span>
                         <input type="text" class="form-control" placeholder="advance ID#" ng-model="additionalDonor.id" maxlength="7" />
                         <span class="form-control-feedback fa fa-check" ng-class="additionalDonor.statusClasses"></span>
                         <p class="help-block">Enter the donor's advance ID. If you don't know it, you can click "Lookup" to search for the donor information.</p>
