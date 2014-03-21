@@ -1,0 +1,125 @@
+﻿
+<script type="text/ng-template" id="donorTemplate.html">
+    <a>
+        <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+        <p class="small">{{match.model.address}}</p>
+    </a>
+</script>
+
+<script type="text/ng-template" id="newDonorTemplate.html">
+    <div class="modal-header">
+        <h3>Create a new donor</h3>
+    </div>
+    <div class="modal-body">
+        <form>
+            <fieldset>
+                <legend>
+                    The following fields are all required to create a new donor
+                </legend>
+                <div class="form-group">
+                    <span>Donor Name</span>
+                    <input type="text" class="form-control" placeholder="donor name" ng-model="newDonor.name" />
+                </div>
+                <div class="form-group">
+                    <span>Address</span>
+                    <input type="text" class="form-control" placeholder="1 Shields Ave, Davis, CA, 95616" ng-model="newDonor.address" />
+                </div>
+                <div class="form-group">
+                    <span>Phone</span>
+                    <input type="text" class="form-control" placeholder="phone number, ex: (530) 555-5555" ng-model="newDonor.phone" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">Create!</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+<script type="text/ng-template" id="lookupDonorTemplate.html">
+    <div class="modal-header">
+        <h3>Lookup existing Advance donor</h3>
+    </div>
+    <div class="modal-body">
+        <form>
+            <fieldset>
+                <legend>
+                    Lookup an existing donor. If you already know the donor's advance ID, close this window and enter it directly.
+                </legend>
+                <div class="form-group">
+                    <span>First Name</span>
+                    <input type="text" class="form-control" placeholder="first name" />
+                </div>
+                <div class="form-group">
+                    <span>Last Name</span>
+                    <input type="text" class="form-control" placeholder="last name" />
+                </div>
+            </fieldset>
+            <div>
+                <button class="btn btn-primary">Search!</button>
+            </div>
+        </form>
+        <h3>Search Results</h3>
+        <div>
+            <div class="list-group" ng-repeat="donor in foundDonors">
+                <a href="#" ng-click="select(donor)" class="list-group-item">
+                    <h4><i class="fa fa-male"></i> {{donor.display}}</h4>
+                    <p>{{donor.address}}</p>
+                    <p>{{donor.phone}}</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" ng-click="cancel()">Close</button>
+    </div>
+</script>
+<script type="text/ng-template" id="newAccountTemplate.html">
+    <div class="modal-header">
+        <h3>Create a new fund</h3>
+    </div>
+    <div class="modal-body">
+        <form>
+            <fieldset>
+                <legend>
+                    The following fields are all required to create a new fund
+                </legend>
+                <div class="form-group">
+                    <span>Agency</span>
+                    <select class="form-control" ng-model="newAccount.agency">
+                        <option>Regents</option>
+                        <option>Foundation</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <span>KFS (Kuali) Account Number</span>
+                    <input type="text" class="form-control" placeholder="KFS Account Number" readonly ng-model="newAccount.id" />
+                </div>
+                <div class="form-group">
+                    <span>KFS (Kuali) Account Name</span>
+                    <input type="text" class="form-control" placeholder="KFS Account Name" readonly ng-model="newAccount.name" />
+                </div>
+                <div class="form-group">
+                    <span>UC Account Number</span>
+                    <input type="text" class="form-control" placeholder="UC Account Number" ng-model="newAccount.ucaccount" />
+                </div>
+                <div class="form-group">
+                    <span>Fund Name</span>
+                    <input type="text" class="form-control" placeholder="Fund Name" ng-model="newAccount.fund" />
+                </div>
+                <div class="form-group">
+                    <span>Program Name</span>
+                    <input type="text" class="form-control" placeholder="Program Name" ng-model="newAccount.program" />
+                </div>
+                <div class="form-group">
+                    <span>Purpose</span>
+                    <input type="text" class="form-control" placeholder="Purpose" ng-model="newAccount.purpose" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
