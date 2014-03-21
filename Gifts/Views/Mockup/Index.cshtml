@@ -56,10 +56,12 @@
                         <input type="text" class="form-control" placeholder="advance ID#" ng-model="additionalDonor.id" maxlength="7" />
                         <span class="form-control-feedback fa fa-check" ng-class="additionalDonor.statusClasses"></span>
                         <p class="help-block">Enter the donor's advance ID. If you don't know it, you can click "Lookup" to search for the donor information.</p>
-                        <div class="col-lg-8 col-lg-offset-4 well well-sm" ng-show="additionalDonor.id && additionalDonor.valid">
-                            <h4><i class="fa fa-gift"></i> {{additionalDonor.display}}</h4>
-                            <p>{{additionalDonor.address}}</p>
-                            <p>{{additionalDonor.phone}}</p>
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-4 well well-sm" ng-show="additionalDonor.id && additionalDonor.valid">
+                                <h4><i class="fa fa-gift"></i> {{additionalDonor.display}}</h4>
+                                <p>{{additionalDonor.address}}</p>
+                                <p>{{additionalDonor.phone}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
