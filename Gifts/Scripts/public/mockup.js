@@ -1,8 +1,27 @@
 ﻿angular.module('gift', ['ui.bootstrap', 'angularFileUpload'])
-    .controller('DonationController', function($scope, $upload, $modal, $log) {
+    .controller('DonationController', function($scope, $filter, $upload, $modal, $log) {
         $scope.donorSelected = undefined;
         $scope.dt = new Date();
         $scope.tendor = 'Cash';
+
+        $scope.$watch('donorId', function(val) {
+
+            if (val && val.length === 7) {
+                $scope.donorFeedbackClasses = "fa-spin fa-spinner";
+                //do some ajax search
+                var found = $filter('filter')($scope.availableDonors, { id: val }, false);
+                console.log(found);
+                if (found && found.length) {
+                    $scope.donorSelected = found[0];
+                    $scope.donorFeedbackClasses = "fa-check";
+                } else {
+                    $scope.donorFeedbackClasses = "fa-exclamation"; //not found
+                }
+            } else {
+                $scope.donorSelected = '';
+                $scope.donorFeedbackClasses = "fa-warning";
+            }
+        });
 
         $scope.additionalDonors = [{}];
         $scope.availableDonors = [

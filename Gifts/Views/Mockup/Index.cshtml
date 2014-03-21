@@ -114,14 +114,15 @@
             <fieldset>
                 <legend>Primary Donor Information</legend>
                 <div class="pull-right" ng-hide="donorSelected.id">
+                    <button class="btn" ng-click="openLookupDonor()"><i class="fa fa-search"></i> Lookup existing donor</button>
                     <button class="btn" ng-click="openNewDonor()"><i class="fa fa-plus"></i> Create new donor</button>
                 </div>
                 <p>Enter the donor information here, or click "create new donor" if you are sure they do not exist in advance</p>
-                <div class="form-group">
-                    <span>Donor:</span>
-                    <input type="text" class="form-control" placeholder="donor name" ng-model="donorSelected"
-                           typeahead="donor as donor.display for donor in availableDonors | filter:{display:$viewValue}" typeahead-template-url="donorTemplate.html" />
-                    <p class="help-block">You can enter any donor's name or their advance donor ID</p>
+                <div class="form-group has-feedback">
+                    <span>Donor Advance ID</span>
+                    <input type="text" class="form-control" placeholder="advance ID#" ng-model="donorId" />
+                    <span class="form-control-feedback fa fa-check" ng-class="donorFeedbackClasses"></span>
+                    <p class="help-block">Enter the donor's advance ID. If you don't know it, you can click "Lookup" to search for the donor information.</p>
                 </div>
                 <div class="col-lg-8 col-lg-offset-4 well well-sm" ng-show="donorSelected.id">
                     <h4><i class="fa fa-gift"></i> {{donorSelected.display}}</h4>
