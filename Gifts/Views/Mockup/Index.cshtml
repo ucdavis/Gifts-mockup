@@ -77,20 +77,20 @@
                         <span>Last Name</span>
                         <input type="text" class="form-control" placeholder="last name" />
                     </div>
-                    <div class="form-group">
-                        <span>Email Address</span>
-                        <input type="text" class="form-control" placeholder="email name" />
-                    </div>
                 </fieldset>
                 <div>
                     <button class="btn btn-primary">Search!</button>
                 </div>
             </form>
+            <h3>Search Results</h3>
             <div>
-                <ul>
-                    <li><a href="#" ng-click="select($index)">Donor #1</a></li>
-                    <li><a href="#" ng-click="select($index)">Donor #2</a></li>
-                </ul>
+                <div class="list-group" ng-repeat="donor in foundDonors">
+                    <a href="#" ng-click="select(donor)" class="list-group-item">
+                        <h4><i class="fa fa-male"></i> {{donor.display}}</h4>
+                        <p>{{donor.address}}</p>
+                        <p>{{donor.phone}}</p>
+                    </a>
+                </div>
             </div>
         </div>
         <div class="modal-footer">
@@ -157,8 +157,8 @@
                 </div>
                 <p>Enter the donor information here, or click "create new donor" if you are sure they do not exist in advance</p>
                 <div class="form-group has-feedback">
-                    <span>Donor Advance ID</span>
-                    <input type="text" class="form-control" placeholder="advance ID#" ng-model="donorId" />
+                    <span>Donor Advance ID [use: ABCDEFG]</span>
+                    <input type="text" class="form-control" placeholder="advance ID#" ng-model="donorId" maxlength="7" />
                     <span class="form-control-feedback fa fa-check" ng-class="donorFeedbackClasses"></span>
                     <p class="help-block">Enter the donor's advance ID. If you don't know it, you can click "Lookup" to search for the donor information.</p>
                 </div>

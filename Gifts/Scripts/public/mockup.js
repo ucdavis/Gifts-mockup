@@ -75,11 +75,18 @@
         $scope.openLookupDonor = function () {
             var modalInstance = $modal.open({
                 templateUrl: 'lookupDonorTemplate.html',
-                controller: 'DonorLookupModalController'
+                controller: 'DonorLookupModalController',
+                resolve: {
+                    availableDonors: function() {
+                        return $scope.availableDonors;
+                    }
+                }
             });
 
             modalInstance.result.then(function (selectedDonor) {
-                console.log(selectedDonor);
+                if (selectedDonor && selectedDonor.id) {
+                    $scope.donorId = selectedDonor.id;
+                }
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
@@ -184,14 +191,12 @@
             $modalInstance.dismiss('cancel');
         };
     })
-    .controller('DonorLookupModalController', function($scope, $modalInstance) {
-        $scope.foundDonors = [];
+    .controller('DonorLookupModalController', function ($scope, $modalInstance, availableDonors) {
+        $scope.foundDonors = availableDonors;
         $scope.selectedDonor = {};
 
-        $scope.select = function (index) {
-            console.log('selected', index);
-            $scope.selectedDonor.id = "1111111";
-            $modalInstance.close($scope.selectedDonor);
+        $scope.select = function (donor) {
+            $modalInstance.close(donor);
         };
 
         $scope.cancel = function () {
