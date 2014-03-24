@@ -55,6 +55,35 @@
             }
         ];
 
+        $scope.giftFeeOptions = [
+            {
+                id: 'gift',
+                text: 'Gift: Deduct from Gift Fee',
+                attachmentRequired: false
+            }, {
+                id: 'donor',
+                text: 'Donor: Deduct 6% from donor\'s contribution',
+                attachmentRequired: false
+            }, {
+                id: 'discretionary',
+                text: 'Discretionary: The Dean/Vice Chancellor pays the fee',
+                attachmentRequired: true,
+                warning: 'An attachment containing both the DaFIS Account number from where the fees will be taken as well as the Dean/Vice Chancellor\'s signature is required'
+            }, {
+                id: 'earnings',
+                text: 'Earnings: For gifts of $100,000 or more',
+                attachmentRequired: true,
+                warning: 'An approval letter signed by Vice Chancellor, University Relations must be attached'
+            }, {
+                id: 'none',
+                text: 'No Fee: Chancellor\'s approved exception',
+                attachmentRequired: true,
+                warning: 'An exemption letter signed by the Chancellor must be attached'
+            }
+        ];
+
+        $scope.giftFee = $scope.giftFeeOptions[0];
+
         /* -- new donor modal */
         $scope.openNewDonor = function() {
             var modalInstance = $modal.open({

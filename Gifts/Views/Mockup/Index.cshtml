@@ -70,6 +70,36 @@
         </div>
         <div class="well">
             <fieldset>
+                <legend>Accounting Information</legend>
+                <div class="form-group">
+                    <span>Enter the associated Kuali account number, or click 'new fund' you need to create a new fund (will delay processing)</span>
+                    <input type="text" class="form-control" placeholder="kuali account number" ng-model="accountSelected"
+                           typeahead="account as account.display for account in kfsAccounts | filter:{display:$viewValue}" />
+                    <p class="help-block">You can enter a kuali account number or search on the account name</p>
+                </div>
+                <div ng-show="accountSelected.id">
+                    <dl class="dl-horizontal">
+                        <dt>Agency</dt>
+                        <dd>{{accountSelected.agency}}</dd>
+                        <dt>Kuali Account Number</dt>
+                        <dd>{{accountSelected.id}}</dd>
+                        <dt>UC Account Number</dt>
+                        <dd>{{accountSelected.ucaccount}}</dd>
+                        <dt>Fund Name</dt>
+                        <dd>{{accountSelected.fund}}</dd>
+                        <dt>Program</dt>
+                        <dd>{{accountSelected.program}}</dd>
+                        <dt>Account Purpose</dt>
+                        <dd>{{accountSelected.purpose}}</dd>
+                    </dl>
+                </div>
+                <div ng-hide="accountSelected.id">
+                    <button class="btn" ng-click="openNewFund()"><i class="fa fa-plus"></i> Create a new fund</button>
+                </div>
+            </fieldset>
+        </div>
+        <div class="well">
+            <fieldset>
                 <legend>General Info</legend>
                 <div class="form-group">
                     <span>When did you receive this donation?</span>
@@ -155,31 +185,17 @@
         </div>
         <div class="well">
             <fieldset>
-                <legend>Accounting Information</legend>
+                <legend>
+                    Gift Fee Source
+                </legend>
                 <div class="form-group">
-                    <span>Enter the associated Kuali account number, or click 'new fund' you need to create a new fund (will delay processing)</span>
-                    <input type="text" class="form-control" placeholder="kuali account number" ng-model="accountSelected"
-                           typeahead="account as account.display for account in kfsAccounts | filter:{display:$viewValue}" />
-                    <p class="help-block">You can enter a kuali account number or search on the account name</p>
+                    <span>How is the gift fee to be collected?</span>
+                    <select class="form-control" ng-model="giftFee" ng-options="fee as fee.text for fee in giftFeeOptions"></select>
                 </div>
-                <div ng-show="accountSelected.id">
-                    <dl class="dl-horizontal">
-                        <dt>Agency</dt>
-                        <dd>{{accountSelected.agency}}</dd>
-                        <dt>Kuali Account Number</dt>
-                        <dd>{{accountSelected.id}}</dd>
-                        <dt>UC Account Number</dt>
-                        <dd>{{accountSelected.ucaccount}}</dd>
-                        <dt>Fund Name</dt>
-                        <dd>{{accountSelected.fund}}</dd>
-                        <dt>Program</dt>
-                        <dd>{{accountSelected.program}}</dd>
-                        <dt>Account Purpose</dt>
-                        <dd>{{accountSelected.purpose}}</dd>
-                    </dl>
-                </div>
-                <div ng-hide="accountSelected.id">
-                    <button class="btn" ng-click="openNewFund()"><i class="fa fa-plus"></i> Create a new fund</button>
+                <div class="form-group" ng-show="giftFee.attachmentRequired">
+                    <p class="alert alert-danger">{{giftFee.warning}}</p>
+                    <span>Upload Supporting Documentation</span>
+                    <input type="file" class="form-control"/>
                 </div>
             </fieldset>
         </div>
