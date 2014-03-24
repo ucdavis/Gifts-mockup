@@ -132,8 +132,9 @@
             return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
         };
 
-        $scope.toggleMin = function() {
-            $scope.minDate = ($scope.minDate) ? null : new Date();
+        $scope.toggleMin = function () {
+            var today = new Date();
+            $scope.minDate = ($scope.minDate) ? null : today.setDate(today.getDate()-90);
         };
         $scope.toggleMin();
 
