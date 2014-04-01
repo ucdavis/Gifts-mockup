@@ -39,7 +39,7 @@
                     <span class="form-control-feedback fa fa-check" ng-class="donorFeedbackClasses"></span>
                     <p class="help-block">Enter the donor's advance ID. If you don't know it, you can click "Lookup" to search for the donor information.</p>
                 </div>
-                <div class="col-lg-8 col-lg-offset-4 well well-sm" ng-show="donorSelected.id">
+                <div class="col-lg-8 col-lg-offset-4 well well-sm" ng-cloak ng-show="donorSelected.id">
                     <h4><i class="fa fa-gift"></i> {{donorSelected.display}}</h4>
                     <p>{{donorSelected.address}}</p>
                     <p>{{donorSelected.phone}}</p>
@@ -57,7 +57,7 @@
                         <span class="form-control-feedback fa fa-check" ng-class="additionalDonor.statusClasses"></span>
                         <p class="help-block">Enter the donor's advance ID. If you don't know it, you can click "Lookup" to search for the donor information.</p>
                         <div class="row">
-                            <div class="col-lg-8 col-lg-offset-4 well well-sm" ng-show="additionalDonor.id && additionalDonor.valid">
+                            <div class="col-lg-8 col-lg-offset-4 well well-sm" ng-cloak ng-show="additionalDonor.id && additionalDonor.valid">
                                 <h4><i class="fa fa-gift"></i> {{additionalDonor.display}}</h4>
                                 <p>{{additionalDonor.address}}</p>
                                 <p>{{additionalDonor.phone}}</p>
