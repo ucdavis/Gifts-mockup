@@ -1,5 +1,7 @@
 ﻿angular.module('gift', ['ui.bootstrap', 'angularFileUpload'])
-    .controller('DonationController', function($scope, $filter, $upload, $modal, $log) {
+    .controller('DonationController', function($scope, $filter, $upload, $modal, $http, $log) {
+        $http.defaults.headers.common['X-Auth-Token'] = 'gILluB6iegwDQ3rXwGywkLgov43q0ZZm1qAEOmgT1jFukW9rHHCEVSskeOPlbQJ';
+
         $scope.donorSelected = undefined;
         $scope.additionalDonorSelected = undefined;
 
@@ -8,17 +10,22 @@
 
         $scope.$watch('donorId', function(val) {
 
-            if (val && val.length === 7) {
+            if (val && val.length === 10) {
                 $scope.donorFeedbackClasses = "fa-spin fa-spinner";
-                //do some ajax search
-                var found = $filter('filter')($scope.availableDonors, { id: val }, false);
-                console.log(found);
-                if (found && found.length) {
-                    $scope.donorSelected = found[0];
-                    $scope.donorFeedbackClasses = "fa-check";
-                } else {
-                    $scope.donorFeedbackClasses = "fa-exclamation"; //not found
-                }
+
+                $http.get('https://test.caes.ucdavis.edu/GivingService/api/entities/' + val)
+                    .success(function(data) {
+                        $log.info(data);
+                        if (data && data !== 'null') {
+                            var foundDonor = { id: data.Id_Number, name: data.FullName, address: data.Address };
+                            foundDonor.display = foundDonor.name + ' (' + foundDonor.id + ")";
+
+                            $scope.donorSelected = foundDonor;
+                            $scope.donorFeedbackClasses = "fa-check";
+                        } else {
+                            $scope.donorFeedbackClasses = "fa-exclamation"; //not found
+                        }
+                });
             } else {
                 $scope.donorSelected = '';
                 $scope.donorFeedbackClasses = "fa-warning";
@@ -106,17 +113,13 @@
         $scope.openLookupDonor = function () {
             var modalInstance = $modal.open({
                 templateUrl: 'lookupDonorTemplate.html',
-                controller: 'DonorLookupModalController',
-                resolve: {
-                    availableDonors: function() {
-                        return $scope.availableDonors;
-                    }
-                }
+                controller: 'DonorLookupModalController'
             });
 
             modalInstance.result.then(function (selectedDonor) {
-                if (selectedDonor && selectedDonor.id) {
-                    $scope.donorId = selectedDonor.id;
+                console.log(selectedDonor);
+                if (selectedDonor && selectedDonor.Id_Number) {
+                    $scope.donorId = selectedDonor.Id_Number;
                 }
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
@@ -244,9 +247,19 @@
             $modalInstance.dismiss('cancel');
         };
     })
-    .controller('DonorLookupModalController', function ($scope, $modalInstance, availableDonors) {
-        $scope.foundDonors = availableDonors;
+    .controller('DonorLookupModalController', function ($scope, $http, $modalInstance) {
+        $scope.foundDonors = [];
         $scope.selectedDonor = {};
+        $scope.searchName = {};
+
+        $scope.search = function () {
+            $http({ method: 'GET', url: 'https://test.caes.ucdavis.edu/GivingService/api/entities', params: $scope.searchName })
+                .success(function(data) {
+                    if (data && data.length) {
+                        $scope.foundDonors = data;
+                }
+            });
+        };
 
         $scope.select = function (donor) {
             $modalInstance.close(donor);
